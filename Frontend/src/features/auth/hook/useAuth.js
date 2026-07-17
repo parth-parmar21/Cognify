@@ -24,10 +24,10 @@ export function useAuth(params) {
         } catch (error) {
             dispatch(setError(error.response?.data?.message || "Login failed"))
             console.log(error);
-            
+
         } finally {
             dispatch(setLoading(false))
-        }   
+        }
     }
 
     async function handleGetMe() {

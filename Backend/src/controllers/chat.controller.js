@@ -5,18 +5,28 @@ export async function sendMessage(req, res) {
     const { message, chat: chatId } = req.body
     
     
-    let title = null, chat = null
+    let chat = null
     
-    console.log(message, chatId);
-    if (!chatId) {
-        title = await generateChatTitle(message)
+    if (chatId) {
+        chat = await Chat.findOne({
+            _id: chatId,
+            user: req.user._id
+        })
+
+        if (!chat) {
+            return res.status(404)
+            .json({
+                message: "Chat not found"
+            })
+        }
+    } else{
         chat = await Chat.create({
             user: req.user._id,
-            title
+            title: await generateChatTitle(message)
         })
     }
 
-    const userMessage = await Message.create({
+        await Message.create({
         chat: chatId || chat._id,
         content: message,
         role: "user"
@@ -34,7 +44,6 @@ export async function sendMessage(req, res) {
 
 
     res.json({ 
-        title,
         chat,
         aiMessage
     })
