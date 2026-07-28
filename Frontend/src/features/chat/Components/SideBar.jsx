@@ -1,46 +1,96 @@
-import React, { useEffect } from 'react'
-import Logo from '../../../assets/LogoWhite.png'
-import { PanelLeft } from 'lucide-react'
-import { useChat } from '../hooks/useChat'
-import { useSelector } from 'react-redux'
+import React, { useEffect, useState } from "react";
+import Logo from "../../../assets/LogoWhite.png";
+import { PanelLeft, SquarePen } from "lucide-react";
+import { useChat } from "../hooks/useChat";
+import { useDispatch, useSelector } from "react-redux";
+import { setCurrentChatId } from "../chat.slice";
 
 const SideBar = () => {
-    const { handleGetChats, handleOpenChat } = useChat()
-    const chats = useSelector((state) => state.chat.chats)
+    const { handleGetChats, handleOpenChat } = useChat();
+
+    const chats = useSelector((state) => state.chat.chats);
+    const dispatch = useDispatch();
+
+    const [isSideBarOpen, setIsSideBarOpen] = useState(true);
+
     useEffect(() => {
-        handleGetChats()
-    }, [])
+        handleGetChats();
+    }, []);
 
     const openChat = (chatId) => {
-        handleOpenChat(chatId, chats)
-    }
+        handleOpenChat(chatId, chats);
+    };
 
     return (
-        <div className='bg-[#111] overflow-y-auto scrollbar-none border-r-2 border-[#ffffff10] h-full w-[15vw] py-4 px-3'>
-            <div className='flex items-center justify-between'>
-                <div className='w-10'>
-                    <img src={Logo} alt="" />
-                </div>
-                <div>
-                    <PanelLeft color='#cecece' />
-                </div>
+        <aside
+            className={`shrink-0 h-full bg-[#111] border-r border-[#ffffff10] transition-all duration-300 overflow-hidden ${isSideBarOpen ? "w-[16vw] px-4 py-4" : "w-[3vw] px-1 py-0"
+                }`}
+        >
+            {/* Header */}
+            <div
+                className={`flex items-center ${isSideBarOpen ? "justify-between" : "justify-center"
+                    }`}
+            >
+                {isSideBarOpen && (
+                    <h1 className="font-bold text-xl text-[#ffffffe8]">Cognify</h1>
+                )}
+
+                <button
+                    onClick={() => setIsSideBarOpen((prev) => !prev)}
+                    className="p-2 rounded-lg hover:bg-[#ffffff10] transition-colors"
+                >
+                    <PanelLeft
+                        size={20}
+                        color="#ffffffe8"
+                    />
+                </button>
             </div>
-            <div>
-                {Object.values(chats).map((cht, idx) => {
-                    return (
+
+            {/* New Chat */}
+            <button
+                onClick={() => dispatch(setCurrentChatId(null))}
+                className={`w-full h-11 rounded-xl hover:bg-[#ffffff10] transition-all flex items-center ${isSideBarOpen
+                    ? "justify-start gap-4 px-3 mt-6"
+                    : "justify-center mt-4"
+                    } text-[#ffffffe8]`}
+            >
+                <SquarePen size={20} />
+
+                <span
+                    className={`transition-all duration-200 whitespace-nowrap ${isSideBarOpen
+                            ? "opacity-100"
+                            : "opacity-0 w-0 overflow-hidden"
+                        }`}
+                >
+                    New Chat
+                </span>
+            </button>
+
+            {/* Chats */}
+            <div
+                className={`mt-8 transition-all ${isSideBarOpen
+                        ? "opacity-100"
+                        : "opacity-0 pointer-events-none"
+                    }`}
+            >
+                <h2 className="text-sm font-semibold text-[#ffffffe8] uppercase tracking-wide mb-3">
+                    Chats
+                </h2>
+
+                <div className="space-y-1">
+                    {Object.values(chats).map((chat) => (
                         <button
-                            className='bg-[#111] hover:bg-[#ffffff10] w-full h-10 rounded-lg my-1 p-2 text-[#cecece]'
-                            key={idx}
-                            onClick={() => openChat(cht.id)}
+                            key={chat.id}
+                            onClick={() => openChat(chat.id)}
+                            className="w-full text-left px-3 py-2 rounded-lg text-[#ffffffe8] hover:bg-[#ffffff10] transition truncate"
                         >
-                            {cht.title}
+                            {chat.title}
                         </button>
-                    );
-                })}
+                    ))}
+                </div>
             </div>
-        </div>
+        </aside>
+    );
+};
 
-    )
-}
-
-export default SideBar
+export default SideBar; 

@@ -106,8 +106,8 @@ const PromptInput = () => {
                                     flex
                                     items-center
                                     justify-center
-                                    text-[#cecece]
-                                    hover:bg-[#31b8c6]
+                                    text-[#ffffffe8]
+                                    hover:bg-[#ffffff10]
                                     hover:text-white
                                     transition
                                 "
@@ -124,13 +124,12 @@ const PromptInput = () => {
                                         h-11
                                         w-11
                                         rounded-full
-                                        bg-[#cecece]
+                                        bg-[#ffffffe8]
                                         text-black
                                         flex
                                         items-center
                                         justify-center
-                                        hover:bg-[#31b8c6]
-                                        hover:text-white
+                                        hover:bg-[#ffffffae]
                                         transition
                                     "
                         >

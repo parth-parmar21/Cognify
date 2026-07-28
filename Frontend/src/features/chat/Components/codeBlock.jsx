@@ -63,7 +63,7 @@ const codeBlock = ({ inline, className, children, ...props }) => {
                     }
                 </button>
             </div>
-
+            <div className="code-scroll rounded-lg">
             <SyntaxHighlighter
             language={language}
             style={coldarkDark}
@@ -71,11 +71,12 @@ const codeBlock = ({ inline, className, children, ...props }) => {
                 margin: 0,
                 padding: "20px",
                 background: isTerminal ? "#000" : "#212121",
-                fontSize: 14
+                fontSize: 14,                
             }}
             wrapLongLines
             {...props}
             >{String(children).replace(/\n$/, '')}</SyntaxHighlighter>
+            </div>
         </div>
     )
 }

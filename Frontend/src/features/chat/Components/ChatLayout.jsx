@@ -5,11 +5,8 @@ import { useChat } from "../hooks/useChat";
 import codeBlock from "./codeBlock";
 import Messages from "./Messages";
 import PromptInput from "./PromptInput";
-const Chat = () => {
+const ChatLayout = () => {
     const chat = useChat()
-
-
-    
 
     useEffect(() => {
         chat.initializedSocketConnection()
@@ -18,7 +15,7 @@ const Chat = () => {
 
 
     return (
-        <section className="min-h-screen w-[85vw] bg-[#111] flex flex-col relative">
+        <section className="flex-1 min-h-screen bg-[#111] flex flex-col relative">
 
             {/* Chat Area */}
             <Messages />
@@ -30,4 +27,4 @@ const Chat = () => {
     );
 };
 
-export default Chat;
+export default ChatLayout;

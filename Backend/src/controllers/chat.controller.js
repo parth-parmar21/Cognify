@@ -4,7 +4,6 @@ import { Message } from "../models/message.model.js"
 export async function sendMessage(req, res) {
     const { message, chat: chatId } = req.body
     
-    
     let chat = null
     
     if (chatId) {

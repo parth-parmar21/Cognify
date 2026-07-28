@@ -25,14 +25,29 @@ const agent = createAgent({
 
 export async function generateResponse(messages) {
     const response = await agent.invoke({
-        messages: messages.map(msg => {
-            if (msg.role == "user") {
-                return new HumanMessage(msg.content);
-            } else if (msg.role == "ai") {
-                return new AIMessage(msg.content);
-            }
-        }
-    )}) 
+        messages: [
+            new SystemMessage(`
+You are a helpful AI assistant.
+
+Formatting rules:
+- Always respond in valid GitHub Markdown.
+- Use headings (##) for sections.
+- Use bullet lists instead of putting every item on a new line.
+- Use tables when presenting schedules or comparisons.
+- Bold only important labels.
+- Never insert blank lines between list items.
+- Keep paragraphs short.
+- Do not use horizontal rules (---) unless explicitly requested.
+- Do not output HTML.
+`),
+            ...messages.map(msg => {
+                if (msg.role == "user") {
+                    return new HumanMessage(msg.content);
+                } else if (msg.role == "ai") {
+                    return new AIMessage(msg.content);
+                }
+            })]
+    })
     console.log(JSON.stringify(response, null, 2));
     return response.messages[response.messages.length - 1].text;
 }

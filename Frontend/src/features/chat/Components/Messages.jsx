@@ -8,7 +8,7 @@ import codeBlock from './codeBlock';
 const Messages = () => {
     const chats = useSelector((state) => state.chat.chats);
     const currentChatId = useSelector((state) => state.chat.currentChatId)
-
+    
     return (
         <div className="flex-1 overflow-y-scroll scrollbar-none px-6 py-8 pb-52">
 
@@ -18,7 +18,7 @@ const Messages = () => {
                     {/* Logo */}
                     <img src={Logo} className="w-28" />
 
-                    <h1 className="text-8xl font-medium text-[#cecece]">
+                    <h1 className="text-8xl font-medium text-[#ffffffe8]">
                         Cognify
                     </h1>
 
@@ -35,7 +35,7 @@ const Messages = () => {
                                 }`}
                         >
                             <div
-                                className={`max-w-[75%] px-5 py-3 rounded-2xl whitespace-pre-wrap ${msg.role === "user"
+                                className={`max-w-[90%] px-5 py-3 rounded-2xl ${msg.role === "user"
                                     ? "bg-[#1d1d1d] text-white rounded-br-sm"
                                     : "bg-transparent text-[#e5e5e5] rounded-bl-sm"
                                     }`}
@@ -45,9 +45,29 @@ const Messages = () => {
                                 ) : (
                                     <ReactMarkdown
                                         remarkPlugins={[remarkGfm]}
-                                        components={{
-                                            code: codeBlock
-                                        }}
+                                            components={{
+                                                h1: ({ children }) => (
+                                                    <h1 className="text-2xl font-bold mb-4">{children}</h1>
+                                                ),
+
+                                                h2: ({ children }) => (
+                                                    <h2 className="text-xl font-semibold mt-6 mb-2">{children}</h2>
+                                                ),
+
+                                                p: ({ children }) => (
+                                                    <p className="mb-3 leading-7">{children}</p>
+                                                ),
+
+                                                ul: ({ children }) => (
+                                                    <ul className="list-disc ml-6 mb-3">{children}</ul>
+                                                ),
+
+                                                li: ({ children }) => (
+                                                    <li className="mb-1">{children}</li>
+                                                ),
+
+                                                code: codeBlock,
+                                            }}
                                     >{msg.content}</ReactMarkdown>
                                 )}
                             </div>
