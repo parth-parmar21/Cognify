@@ -5,6 +5,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import Logo from '../../../assets/LogoWhite.png'
 import { useChat } from "../hooks/useChat";
+import codeBlock from "./codeBlock";
 const Chat = () => {
     const fileInputRef = useRef(null);
     const chat = useChat()
@@ -13,6 +14,7 @@ const Chat = () => {
     const currentChatId = useSelector((state) => state.chat.currentChatId)
 
     const [input, setInput] = useState("");
+    const textAreaRef = useRef(null)
 
     useEffect(() => {
         chat.initializedSocketConnection()
@@ -50,11 +52,20 @@ const Chat = () => {
         }
     };
 
+    const handleInput = (e) => {
+        setInput(e.target.value)
+
+        const textarea = textAreaRef.current
+        textarea.style.height = "auto"
+        textarea.style.height = `${Math.min(textarea.scrollHeight, 200)}px`
+
+    }
+
     return (
-        <section className="min-h-screen w-[85vw] bg-[#111] flex flex-col">
+        <section className="min-h-screen w-[85vw] bg-[#111] flex flex-col relative">
 
             {/* Chat Area */}
-            <div className="flex-1 overflow-y-scroll scrollbar-none px-6 py-8">
+            <div className="flex-1 overflow-y-scroll scrollbar-none px-6 py-8 pb-52">
 
                 {!chats?.[currentChatId]?.messages?.length ? (
                     <div className="h-full flex items-center justify-center gap-4">
@@ -87,7 +98,12 @@ const Chat = () => {
                                     {msg.role === "user" ? (
                                         msg.content
                                     ) : (
-                                        <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.content}</ReactMarkdown>
+                                        <ReactMarkdown
+                                        remarkPlugins={[remarkGfm]}
+                                        components={{
+                                            code: codeBlock
+                                        }}
+                                        >{msg.content}</ReactMarkdown>
                                     )}
                                 </div>
                             </div>
@@ -97,7 +113,7 @@ const Chat = () => {
             </div>
 
             {/* Input Box */}
-            <div className="sticky bottom-0 bg-[#111] px-5 pb-6">
+            <div className="absolute w-full bottom-0 bg-transparent px-5 pb-6">
                 <div
                     className="
                             w-full
@@ -111,9 +127,10 @@ const Chat = () => {
                         "
                 >
                     <textarea
-                        rows={2}
+                        ref={textAreaRef}
+                        rows={1}
                         value={input}
-                        onChange={(e) => setInput(e.target.value)}
+                        onChange={handleInput}
                         onKeyDown={handleKeyDown}
                         placeholder="Ask anything..."
                         className="
@@ -124,6 +141,7 @@ const Chat = () => {
                                 placeholder:text-zinc-500
                                 outline-none
                                 text-lg
+                                scrollbar-none
                             "
                     />
 
@@ -159,24 +177,6 @@ const Chat = () => {
 
                         <div className="flex gap-3">
 
-                            <button
-                                className="
-                                        h-11
-                                        w-11
-                                        rounded-full
-                                        border
-                                        border-[#ffffff10]
-                                        flex
-                                        items-center
-                                        justify-center
-                                        text-[#cecece]
-                                        hover:bg-[#31b8c6]
-                                        hover:text-white
-                                        transition
-                                    "
-                            >
-                                <Mic size={20} />
-                            </button>
 
                             <button
                                 onClick={sendMessage}
