@@ -1,21 +1,40 @@
 import { ChatMistralAI } from "@langchain/mistralai";
-import { HumanMessage, SystemMessage, AIMessage } from "langchain"
-
+import { HumanMessage, SystemMessage, AIMessage, tool, createAgent } from "langchain"
+import * as z from "zod"
+import { searchInternet } from "./internet.service.js";
 const model = new ChatMistralAI({
     model: "mistral-small-latest",
     apiKey: process.env.MISTRAL_API_KEY
 });
 
-export async function generateResponse(messages) {
-    const response = await model.invoke(messages.map(msg => {
-        if (msg.role == "user") {
-            return new HumanMessage(msg.content);
-        } else if (msg.role == "ai") {
-            return new AIMessage(msg.content);
-        }
-    }))
+const searchInternetTool = tool(
+    searchInternet,
+    {
+        name: "searchInternet",
+        description: "Use this tool to search the internet for information.",
+        schema: z.object({
+            query: z.string().describe("The search query to look up on the internet.")
+        })
+    }
+)
 
-    return response.text
+const agent = createAgent({
+    model,
+    tools: [searchInternetTool]
+})
+
+export async function generateResponse(messages) {
+    const response = await agent.invoke({
+        messages: messages.map(msg => {
+            if (msg.role == "user") {
+                return new HumanMessage(msg.content);
+            } else if (msg.role == "ai") {
+                return new AIMessage(msg.content);
+            }
+        }
+    )}) 
+    console.log(JSON.stringify(response, null, 2));
+    return response.messages[response.messages.length - 1].text;
 }
 
 export async function generateChatTitle(message) {
