@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useChat } from '../hooks/useChat'
 import SideBar from '../Components/SideBar'
-import Chat from '../Components/Chat'
+import Chat from '../Components/ChatLayout'
 
 const Dashboard = () => {
     const user = useSelector(state => state.auth)
