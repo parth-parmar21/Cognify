@@ -23,7 +23,9 @@ const SideBar = () => {
 
     return (
         <aside
-            className={`shrink-0 h-full bg-[#111] border-r border-[#ffffff10] transition-all duration-300 overflow-hidden ${isSideBarOpen ? "w-[16vw] px-4 py-4" : "w-[3vw] px-1 py-0"
+            className={`chatgpt-scrollbar shrink-0 h-full bg-[#111] border-r border-[#ffffff10] transition-all duration-300 ${isSideBarOpen
+                    ? "w-[16vw] px-4 py-4 overflow-y-auto"
+                    : "w-[3vw] px-1 py-0 overflow-hidden"
                 }`}
         >
             {/* Header */}

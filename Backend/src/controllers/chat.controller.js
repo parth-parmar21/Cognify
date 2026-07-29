@@ -2,7 +2,7 @@ import { generateChatTitle, generateResponse } from "../services/ai.service.js"
 import { Chat } from "../models/chat.model.js"
 import { Message } from "../models/message.model.js"
 export async function sendMessage(req, res) {
-    const { message, chat: chatId } = req.body
+    const { message, chatId } = req.body
     
     let chat = null
     
@@ -26,12 +26,12 @@ export async function sendMessage(req, res) {
     }
 
         await Message.create({
-        chat: chatId || chat._id,
+        chat: chat._id,
         content: message,
         role: "user"
     })
 
-    const messages = await Message.find({ chat: chatId || chat._id })
+    const messages = await Message.find({ chat: chat._id })
 
     const result = await generateResponse(messages)
 

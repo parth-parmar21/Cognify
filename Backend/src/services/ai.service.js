@@ -48,7 +48,6 @@ Formatting rules:
                 }
             })]
     })
-    console.log(JSON.stringify(response, null, 2));
     return response.messages[response.messages.length - 1].text;
 }
 
@@ -66,4 +65,27 @@ export async function generateChatTitle(message) {
     ])
 
     return response.text
+}
+
+export async function generateResponseStream(messages, callback) {
+    const stream = await model.stream([
+        new SystemMessage(`
+You are a helpful AI assistant.
+Always respond in markdown.
+`),
+
+        ...messages.map(msg => {
+            if (msg.role === "user") {
+                return new HumanMessage(msg.content);
+            }
+
+            return new AIMessage(msg.content);
+        })
+    ]);
+
+    for await (const chunk of stream) {
+        if (chunk.content) {
+            callback(chunk.content);
+        }
+    }
 }

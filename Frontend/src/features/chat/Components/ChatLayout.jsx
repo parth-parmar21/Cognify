@@ -6,11 +6,9 @@ import codeBlock from "./codeBlock";
 import Messages from "./Messages";
 import PromptInput from "./PromptInput";
 const ChatLayout = () => {
-    const chat = useChat()
-
+    const { handleGetChats } = useChat()
     useEffect(() => {
-        chat.initializedSocketConnection()
-        chat.handleGetChats()
+        handleGetChats()
     }, [])
 
 

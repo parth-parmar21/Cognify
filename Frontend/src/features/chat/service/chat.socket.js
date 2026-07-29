@@ -1,11 +1,17 @@
-import { io } from "socket.io-client"
+import { io } from "socket.io-client";
 
-export function initializedSocketConnection(){
+export function initializedSocketConnection() {
+    const token = document.cookie
+        .split("; ")
+        .find(c => c.startsWith("token="))
+        ?.split("=")[1];
+
     const socket = io("http://localhost:3000", {
-        withCredentials: true
-    })
-
-    socket.on("connect", () => {
-        console.log("Connected to socket.io server");
+        withCredentials: true,
+        auth: {
+            token
+        }
     });
+
+    return socket;
 }
