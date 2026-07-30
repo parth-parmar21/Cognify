@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { Mic, Send, Plus, PanelLeft } from "lucide-react";
 import { useSelector } from "react-redux";
 import { useChat } from "../hooks/useChat";
-import codeBlock from "./CodeBlock";
 import Messages from "./Messages";
 import PromptInput from "./PromptInput";
 const ChatLayout = ({ isSideBarOpen, setIsSideBarOpen }) => {
