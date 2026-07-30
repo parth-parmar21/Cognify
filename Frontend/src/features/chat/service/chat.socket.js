@@ -6,7 +6,7 @@ export function initializedSocketConnection() {
         .find(c => c.startsWith("token="))
         ?.split("=")[1];
 
-    const socket = io("http://localhost:3000", {
+    const socket = io("https://cognify-skd0.onrender.com", {
         withCredentials: true,
         auth: {
             token

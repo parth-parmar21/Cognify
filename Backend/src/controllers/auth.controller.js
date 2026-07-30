@@ -41,7 +41,7 @@ export async function register(req, res) {
                 <p>Hi ${username},</p>
                 <p>Thank you for registering at <strong>Cognify</strong>. We're excited to have you on board!</p>
                 <p>Please verify your email address by clicking the link below:</p>
-                <a href="http://localhost:3000/api/auth/verify-email?token=${emailVerificationToken}">Verify Email</a>
+                <a href="https://cognify-alpha-six.vercel.app/?token=${emailVerificationToken}">Verify Email</a>
                 <p>If you did not create an account, please ignore this email.</p>
                 <p>Best regards,<br>The Perplexity Team</p>
         `
@@ -84,7 +84,7 @@ export async function verifyEmail(req, res) {
         const html = `
         <h1>Email Verified</h1>
             <p>Your email has been verified successfully!.Now you can login.</p>
-            <a href="http://localhost:3000/login">Log in</a>
+            <a href="https://cognify-alpha-six.vercel.app/login">Log in</a>
         `
 
         return res.send(html)
