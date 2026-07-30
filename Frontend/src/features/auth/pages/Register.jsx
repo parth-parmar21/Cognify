@@ -6,14 +6,36 @@ const Register = () => {
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [errors, setErrors] = useState({});
+
     const navigate = useNavigate()
     const { handleRegister } = useAuth()
     const handleSubmit = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
 
-        await handleRegister({ username, email, password })
-        navigate("/login")
-    }
+        const result = await handleRegister({
+            username,
+            email,
+            password
+        });
+
+        if (result.success) {
+            navigate("/login");
+            return;
+        }
+
+        const fieldErrors = {};
+
+        result.errors.forEach(err => {
+            fieldErrors[err.path] = err.msg;
+        });
+
+        if (result.field) {
+            fieldErrors[result.field] = result.message;
+        }
+
+        setErrors(fieldErrors);
+    };
 
     return (
         <section className="min-h-screen bg-zinc-950 px-4 py-10 text-zinc-100 sm:px-6 lg:px-8">
@@ -37,6 +59,11 @@ const Register = () => {
                                 onChange={(e) => setUsername(e.target.value)}
                                 className="w-full rounded-lg border border-zinc-700 bg-zinc-950/80 px-4 py-3 text-zinc-100 outline-none transition focus:border-[#999] focus:shadow-[0_0_0_3px_rgba(49,184,198,0.25)]"
                             />
+                            {errors.username && (
+                                <p className="mt-1 text-sm text-red-500">
+                                    {errors.username}
+                                </p>
+                            )}
                         </div>
 
                         <div>
@@ -50,6 +77,11 @@ const Register = () => {
                                 onChange={(e) => setEmail(e.target.value)}
                                 className="w-full rounded-lg border border-zinc-700 bg-zinc-950/80 px-4 py-3 text-zinc-100 outline-none transition focus:border-[#999] focus:shadow-[0_0_0_3px_rgba(49,184,198,0.25)]"
                             />
+                            {errors.email && (
+                                <p className="mt-1 text-sm text-red-500">
+                                    {errors.email}
+                                </p>
+                            )}
                         </div>
 
                         <div>
@@ -63,8 +95,17 @@ const Register = () => {
                                 onChange={(e) => setPassword(e.target.value)}
                                 className="w-full rounded-lg border border-zinc-700 bg-zinc-950/80 px-4 py-3 text-zinc-100 outline-none transition focus:border-[#999] focus:shadow-[0_0_0_3px_rgba(49,184,198,0.25)]"
                             />
+                            {errors.password && (
+                                <p className="mt-1 text-sm text-red-500">
+                                    {errors.password}
+                                </p>
+                            )}
                         </div>
-
+                        {errors.server && (
+                            <p className="mb-4 text-center text-red-500">
+                                {errors.server}
+                            </p>
+                        )}
                         <button
                             type="submit"
                             className="w-full rounded-lg bg-[#31b8c6] px-4 py-3 font-semibold text-zinc-950 transition hover:bg-[#45c7d4] active:scale-95"

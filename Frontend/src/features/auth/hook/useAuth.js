@@ -7,26 +7,60 @@ export function useAuth(params) {
 
     async function handleRegister({ email, username, password }) {
         try {
-            dispatch(setLoading(true))
-            const data = await register({ email, username, password })
+            dispatch(setLoading(true));
+
+            const data = await register({ email, username, password });
+
+            dispatch(setError(null));
+
+            return {
+                success: true,
+                data
+            };
+
         } catch (error) {
-            dispatch(setError(error.response?.data?.message || "Registration failed"))
+
+            const response = error.response?.data;
+
+            return {
+                success: false,
+                message: response?.message,
+                field: response?.field,
+                errors: response?.errors || []
+            };
+
         } finally {
-            dispatch(setLoading(false))
+            dispatch(setLoading(false));
         }
     }
 
     async function handleLogin({ email, password }) {
         try {
-            dispatch(setLoading(true))
-            const data = await login({ email, password })
-            dispatch(setUser(data.user))
+            dispatch(setLoading(true));
+
+            const data = await login({ email, password });
+
+            dispatch(setUser(data.user));
+            dispatch(setError(null));
+
+            return {
+                success: true,
+                data
+            };
+
         } catch (error) {
-            dispatch(setError(error.response?.data?.message || "Login failed"))
-            console.log(error);
+
+            const response = error.response?.data;
+
+            return {
+                success: false,
+                message: response?.message,
+                field: response?.field,
+                errors: response?.errors || []
+            };
 
         } finally {
-            dispatch(setLoading(false))
+            dispatch(setLoading(false));
         }
     }
 

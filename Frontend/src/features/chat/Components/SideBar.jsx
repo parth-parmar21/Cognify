@@ -90,7 +90,7 @@ const SideBar = ({ isSideBarOpen, setIsSideBarOpen }) => {
                         className={`mt-8 ${!isSideBarOpen && "opacity-0 pointer-events-none"
                             }`}
                     >
-                        <h2 className="text-xs text-zinc-400 uppercase mb-3">Chats</h2>
+                        <h2 className="text-md text-white font-bold uppercase">Chats</h2>
 
                         <div className="space-y-1">
                             {Object.values(chats).map((chat) => (

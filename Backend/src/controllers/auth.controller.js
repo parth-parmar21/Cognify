@@ -17,10 +17,10 @@ export async function register(req, res) {
     })
 
     if (isUserExists) {
-        return res.status(400).json({
+        return res.status(409).json({
             message: "User already exists with this email or username",
             success: false,
-            err: "User already exists"
+            field: "email"
         })
     }
 
@@ -111,30 +111,31 @@ export async function login(req, res) {
 
     if (!user) {
         return res.status(404).json({
-            message: "Invalid credentials",
             success: false,
-            err: "User not found"
+            field: "email",
+            message: "Email not found"
         })
     }
 
     const isPasswordValid = await user.comparePassword(password)
 
+
     if (!isPasswordValid) {
         return res.status(401).json({
-            message: "Invalid credentials",
             success: false,
-            err: "Invalid password"
+            field: "password",
+            message: "Invalid password"
         })
     }
 
     if (!user.verified) {
-        return res.status(400)
-        .json({
-            message: "Please verify email before logging in",
+        return res.status(400).json({
             success: false,
-            err: "Email not verified"
+            field: "email",
+            message: "Please verify your email before logging in"
         })
     }
+    
     const token = jwt.sign({
         _id: user._id,
         email: user.email
