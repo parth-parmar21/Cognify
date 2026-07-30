@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import Logo from '../../../assets/LogoWhite.png'
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import CodeBlock from './CodeBlock'
+import CodeBlock from './CodeBlock';
 
 const Messages = () => {
     const chats = useSelector((state) => state.chat.chats);
