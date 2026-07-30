@@ -6,6 +6,8 @@ import { useSelector } from 'react-redux'
 const Login = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [errors, setErrors] = useState({});
+
     const { handleLogin } = useAuth()
     const navigate = useNavigate()
 
@@ -17,11 +19,32 @@ const Login = () => {
     }
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
 
-        await handleLogin({ email, password })
-        navigate('/')
-    }
+        const result = await handleLogin({
+            email,
+            password
+        });
+
+        if (result.success) {
+            navigate("/");
+            return;
+        }
+
+        const fieldErrors = {};
+
+        // express-validator errors
+        result.errors.forEach(err => {
+            fieldErrors[err.path] = err.msg;
+        });
+
+        // controller errors
+        if (result.field) {
+            fieldErrors[result.field] = result.message;
+        }
+
+        setErrors(fieldErrors);
+    };
 
     return (
         <section className="min-h-screen bg-zinc-950 px-4 py-10 text-zinc-100 sm:px-6 lg:px-8">
@@ -51,9 +74,21 @@ const Login = () => {
                                 type="email"
                                 placeholder="you@example.com"
                                 value={email}
-                                onChange={(e) => setEmail(e.target.value)}
+                                onChange={(e) => {
+                                    setEmail(e.target.value);
+
+                                    if (errors.email) {
+                                        setErrors(prev => ({ ...prev, email: "" }));
+                                    }
+                                }}
                                 className="w-full rounded-lg border border-zinc-700 bg-zinc-950/80 px-4 py-3 text-zinc-100 outline-none transition focus:border-[#999] focus:shadow-[0_0_0_3px_rgba(153,153,153,0.25)]"
                             />
+
+                            {errors.email && (
+                                <p className="mt-1 text-sm text-red-500">
+                                    {errors.email}
+                                </p>
+                            )}
                         </div>
 
                         <div>
@@ -69,9 +104,21 @@ const Login = () => {
                                 type="password"
                                 placeholder="Enter your password"
                                 value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                onChange={(e) => {
+                                    setPassword(e.target.value);
+
+                                    if (errors.password) {
+                                        setErrors(prev => ({ ...prev, password: "" }));
+                                    }
+                                }}
                                 className="w-full rounded-lg border border-zinc-700 bg-zinc-950/80 px-4 py-3 text-zinc-100 outline-none transition focus:border-[#999] focus:shadow-[0_0_0_3px_rgba(153,153,153,0.25)]"
                             />
+
+                            {errors.password && (
+                                <p className="mt-1 text-sm text-red-500">
+                                    {errors.password}
+                                </p>
+                            )}
                         </div>
 
                         <button
