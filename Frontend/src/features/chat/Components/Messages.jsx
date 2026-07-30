@@ -3,30 +3,36 @@ import { useSelector } from 'react-redux';
 import Logo from '../../../assets/LogoWhite.png'
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import codeBlock from './codeBlock';
+import codeBlock from './CodeBlock';
 
 const Messages = () => {
     const chats = useSelector((state) => state.chat.chats);
     const currentChatId = useSelector((state) => state.chat.currentChatId)
-    
+
     return (
-        <div className="flex-1 overflow-y-scroll scrollbar-none px-6 py-8 pb-52">
+        <div className="flex-1 overflow-y-auto scrollbar-none px-3 sm:px-5 md:px-8 py-6 pb-48">
 
             {!chats?.[currentChatId]?.messages?.length ? (
-                <div className="h-full flex items-center justify-center gap-4">
 
-                    {/* Logo */}
-                    <img src={Logo} className="w-28" />
+                <div className="h-full flex flex-col md:flex-row items-center justify-center gap-6 text-center">
 
-                    <h1 className="text-8xl font-medium text-[#ffffffe8]">
+                    <img
+                        src={Logo}
+                        className="w-20 md:w-28"
+                    />
+
+                    <h1 className="text-4xl md:text-7xl font-medium text-white">
                         Cognify
                     </h1>
 
                 </div>
-            ) : (
-                <div className="max-w-4xl mx-auto flex flex-col gap-6">
 
-                    {chats?.[currentChatId]?.messages?.map((msg, index) => (
+            ) : (
+
+                <div className="w-full max-w-4xl mx-auto flex flex-col gap-5">
+
+                    {chats[currentChatId].messages.map((msg, index) => (
+
                         <div
                             key={index}
                             className={`flex ${msg.role === "user"
@@ -35,46 +41,69 @@ const Messages = () => {
                                 }`}
                         >
                             <div
-                                className={`max-w-[90%] px-5 py-3 rounded-2xl ${msg.role === "user"
+                                className={`rounded-2xl px-4 py-3 md:px-5 md:py-4 max-w-[95%] md:max-w-[80%] ${msg.role === "user"
                                     ? "bg-[#1d1d1d] text-white rounded-br-sm"
-                                    : "bg-transparent text-[#e5e5e5] rounded-bl-sm"
+                                    : "text-zinc-200 rounded-bl-sm"
                                     }`}
                             >
+
                                 {msg.role === "user" ? (
                                     msg.content
                                 ) : (
                                     <ReactMarkdown
                                         remarkPlugins={[remarkGfm]}
-                                            components={{
-                                                h1: ({ children }) => (
-                                                    <h1 className="text-2xl font-bold mb-4">{children}</h1>
-                                                ),
+                                        components={{
+                                            h1: ({ children }) => (
+                                                <h1 className="text-2xl font-bold mb-4">
+                                                    {children}
+                                                </h1>
+                                            ),
+                                            h2: ({ children }) => (
+                                                <h2 className="text-xl font-semibold mt-5 mb-3">
+                                                    {children}
+                                                </h2>
+                                            ),
+                                            p: ({ children }) => {
+                                                const hasBlockElement = React.Children.toArray(children).some((child) => {
+                                                    return React.isValidElement(child) &&
+                                                        (child.type === "pre" || child.type === "div");
+                                                });
 
-                                                h2: ({ children }) => (
-                                                    <h2 className="text-xl font-semibold mt-6 mb-2">{children}</h2>
-                                                ),
+                                                if (hasBlockElement) {
+                                                    return <>{children}</>;
+                                                }
 
-                                                p: ({ children }) => (
-                                                    <p className="mb-3 leading-7">{children}</p>
-                                                ),
-
-                                                ul: ({ children }) => (
-                                                    <ul className="list-disc ml-6 mb-3">{children}</ul>
-                                                ),
-
-                                                li: ({ children }) => (
-                                                    <li className="mb-1">{children}</li>
-                                                ),
-
-                                                code: codeBlock,
-                                            }}
-                                    >{msg.content}</ReactMarkdown>
+                                                return (
+                                                    <p className="leading-7 mb-3">
+                                                        {children}
+                                                    </p>
+                                                );
+                                            },
+                                            ul: ({ children }) => (
+                                                <ul className="list-disc ml-6 mb-3">
+                                                    {children}
+                                                </ul>
+                                            ),
+                                            li: ({ children }) => (
+                                                <li>{children}</li>
+                                            ),
+                                            code: codeBlock,
+                                        }}
+                                    >
+                                        {msg.content}
+                                    </ReactMarkdown>
                                 )}
+
                             </div>
+
                         </div>
+
                     ))}
+
                 </div>
+
             )}
+
         </div>
     )
 }

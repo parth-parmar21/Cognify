@@ -9,6 +9,8 @@ export async function register({username, email, password}) {
     const response = await api.post('/register', { 
         username, email, password 
     });
+    console.log(response.data);
+    
     return response.data;
 }
 

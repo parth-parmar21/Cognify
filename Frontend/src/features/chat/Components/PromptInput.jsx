@@ -53,19 +53,21 @@ const PromptInput = () => {
 
     }
     return (
-        <div className="absolute w-full bottom-0 bg-transparent px-5 pb-6">
+        <div className="absolute bottom-0 w-full px-3 md:px-5 pb-4 md:pb-6">
+
             <div
                 className="
-                            w-full
-                            max-w-3xl
-                            mx-auto
-                            rounded-3xl
-                            border
-                            border-[#ffffff10]
-                            bg-[#171717]
-                            p-5
-                        "
+            max-w-3xl
+            mx-auto
+            rounded-3xl
+            border
+            border-[#ffffff10]
+            bg-[#171717]
+            p-3
+            md:p-5
+        "
             >
+
                 <textarea
                     ref={textAreaRef}
                     rows={1}
@@ -74,71 +76,45 @@ const PromptInput = () => {
                     onKeyDown={handleKeyDown}
                     placeholder="Ask anything..."
                     className="
-                                w-full
-                                resize-none
-                                bg-transparent
-                                text-white
-                                placeholder:text-zinc-500
-                                outline-none
-                                text-lg
-                                scrollbar-none
-                            "
+                w-full
+                resize-none
+                bg-transparent
+                text-white
+                text-base
+                md:text-lg
+                outline-none
+                scrollbar-none
+            "
                 />
 
                 <input
+                    ref={fileInputRef}
                     type="file"
                     accept="image/*"
-                    ref={fileInputRef}
                     onChange={handleFileChange}
                     className="hidden"
                 />
 
-                <div className="flex items-center justify-between mt-4">
+                <div className="flex justify-between items-center mt-4">
 
                     <button
                         onClick={handleFileSelect}
-                        className="
-                                    h-11
-                                    w-11
-                                    rounded-full
-                                    border
-                                    border-[#ffffff10]
-                                    flex
-                                    items-center
-                                    justify-center
-                                    text-[#ffffffe8]
-                                    hover:bg-[#ffffff10]
-                                    hover:text-white
-                                    transition
-                                "
+                        className="h-10 w-10 md:h-11 md:w-11 rounded-full border border-[#ffffff10] flex justify-center items-center text-white hover:bg-[#ffffff10]"
                     >
-                        <Plus size={20} />
+                        <Plus size={18} />
                     </button>
 
-                    <div className="flex gap-3">
+                    <button
+                        onClick={sendMessage}
+                        className="h-10 w-10 md:h-11 md:w-11 rounded-full bg-white text-black flex justify-center items-center hover:bg-zinc-300"
+                    >
+                        <Send size={18} />
+                    </button>
 
-
-                        <button
-                            onClick={sendMessage}
-                            className="
-                                        h-11
-                                        w-11
-                                        rounded-full
-                                        bg-[#ffffffe8]
-                                        text-black
-                                        flex
-                                        items-center
-                                        justify-center
-                                        hover:bg-[#ffffffae]
-                                        transition
-                                    "
-                        >
-                            <Send size={20} />
-                        </button>
-
-                    </div>
                 </div>
+
             </div>
+
         </div>
     )
 }
