@@ -1,5 +1,0 @@
-dark: neutral 900
-second: be5631
-
-light: ece5d29b
-second: be5631

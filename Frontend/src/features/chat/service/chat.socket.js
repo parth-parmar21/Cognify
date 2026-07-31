@@ -1,16 +1,8 @@
 import { io } from "socket.io-client";
 
 export function initializedSocketConnection() {
-    const token = document.cookie
-        .split("; ")
-        .find(c => c.startsWith("token="))
-        ?.split("=")[1];
-
-    const socket = io("https://cognify-skd0.onrender.com", {
+    const socket = io(`${import.meta.env.VITE_BACKEND_URL}`, {
         withCredentials: true,
-        auth: {
-            token
-        }
     });
 
     return socket;

@@ -69,7 +69,6 @@ export async function getChats(req, res) {
 
 export async function getMessages(req, res) {
     const { chatId } = req.params
-console.log(req.user._id);
 
     const chat = await Chat.findOne({
         _id: chatId,

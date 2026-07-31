@@ -8,7 +8,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(morgan('dev'))
 app.use(cors({
-    origin: "https://cognify-alpha-six.vercel.app",
+    origin: `${process.env.FRONTEND_URL}`,
     credentials: true,
 }))
 import authRouter from './routes/auth.routes.js'

@@ -6,34 +6,34 @@ import {
     generateResponseStream,
 } from "../services/ai.service.js";
 import jwt from 'jsonwebtoken'
-
+import { parseCookie } from "cookie"
 let io;
 
 export function initSocket(httpServer) {
     io = new Server(httpServer, {
         cors: {
-            origin: "https://cognify-alpha-six.vercel.app",
+            origin: `${process.env.FRONTEND_URL}`,
             credentials: true,
         },
     });
 
     io.use((socket, next) => {
         try {
-            const token = socket.handshake.auth.token;
+            const cookies = parseCookie(
+                socket.handshake.headers.cookie || ""
+            );
 
+            const token = cookies.token;
             if (!token) {
                 return next(new Error("Unauthorized"));
             }
 
-            const decoded = jwt.verify(
-                token,
-                process.env.JWT_SECRET
-            );
-
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
             socket.user = decoded;
 
             next();
         } catch (err) {
+            console.error(err);
             next(new Error("Unauthorized"));
         }
     });

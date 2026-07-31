@@ -1,6 +1,6 @@
 import axios from "axios"
 const api = axios.create({
-    baseURL: "https://cognify-skd0.onrender.com/api/chats",
+    baseURL: `${import.meta.env.VITE_BACKEND_URL}/api/chats`,
     withCredentials: true
 })
 
@@ -15,11 +15,11 @@ export async function getChats() {
 }
 
 export async function getMessages({chatId}) {
-    const response = await api.get(`${chatId}/messages`)
+    const response = await api.get(`/${chatId}/messages`)
     return response.data
 }
 
 export async function deleteChat({chatId}) {
-    const response = await api.get(`/delete/${chatId}`)
+    const response = await api.delete(`/delete/${chatId}`)
     return response.data
 }

@@ -131,7 +131,6 @@ export function useChat() {
         socketRef.current.on(
             "ai_complete",
             ({ aiMessage }) => {
-                console.log("completed", aiMessage);
                 dispatch(setLoading(false))
             }
         )
