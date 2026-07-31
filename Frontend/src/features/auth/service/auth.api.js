@@ -1,5 +1,4 @@
 import axios from 'axios'
-console.log("Backend URL from auth:", import.meta.env.VITE_BACKEND_URL);
 const api = axios.create({
     baseURL: `${import.meta.env.VITE_BACKEND_URL}/api/auth`,
     withCredentials: true
