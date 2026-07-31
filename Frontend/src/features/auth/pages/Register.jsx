@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { useAuth } from '../hook/useAuth'
+import toast from "react-hot-toast";
 
 const Register = () => {
     const [username, setUsername] = useState('')
@@ -10,6 +11,7 @@ const Register = () => {
 
     const navigate = useNavigate()
     const { handleRegister } = useAuth()
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -20,7 +22,15 @@ const Register = () => {
         });
 
         if (result.success) {
-            navigate("/login");
+            toast.success(
+                "Verification email sent. Please check your inbox."
+            );
+
+            setUsername("");
+            setEmail("");
+            setPassword("");
+            setErrors({});
+
             return;
         }
 
